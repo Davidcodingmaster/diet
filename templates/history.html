@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>分析歷史紀錄</h1>
+<table>
+    <thead>
+        <tr>
+            <th>食材名稱</th>
+            <th>卡路里</th>
+            <th>蛋白質 (g)</th>
+            <th>脂肪 (g)</th>
+            <th>碳水化合物 (g)</th>
+            <th>記錄時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.calories }}</td>
+            <td>{{ entry.protein }}</td>
+            <td>{{ entry.fat }}</td>
+            <td>{{ entry.carbs }}</td>
+            <td>{{ entry.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

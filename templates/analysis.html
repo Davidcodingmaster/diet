@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>飲食分析</h1>
+<form method="POST">
+    <div id="ingredients">
+        <div>
+            <input type="text" name="quantity[]" placeholder="數量">
+            <input type="text" name="unit[]" placeholder="單位 (可選)">
+            <input type="text" name="food[]" placeholder="食材名稱" required>
+        </div>
+    </div>
+    <button type="button" onclick="addIngredient()">新增</button>
+    <button type="submit">分析</button>
+</form>
+
+<script>
+function addIngredient() {
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <input type="text" name="quantity[]" placeholder="數量">
+        <input type="text" name="unit[]" placeholder="單位 (可選)">
+        <input type="text" name="food[]" placeholder="食材名稱" required>
+    `;
+    document.getElementById('ingredients').appendChild(div);
+}
+</script>
+
+{% if data %}
+    <h2>分析結果</h2>
+    <table>
+        <tr>
+            <th>食材</th>
+            <th>卡路里</th>
+            <th>蛋白質 (g)</th>
+            <th>脂肪 (g)</th>
+        </tr>
+        {% for ingredient in data.ingredients %}
+        <tr>
+            <td>{{ ingredient.text }}</td>
+            <td>{{ ingredient.parsed[0].nutrients.ENERC_KCAL.quantity }}</td>
+            <td>{{ ingredient.parsed[0].nutrients.PROCNT.quantity }}</td>
+            <td>{{ ingredient.parsed[0].nutrients.FAT.quantity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}
