@@ -37,5 +37,14 @@
     </table>
 {% endfor %}
 
+{% if suggestion %}
+    <section>
+        <h2>飲食建議</h2>
+        <p>{{ suggestion }}</p>
+    </section>
+{% else %}
+    <p>尚未生成建議。</p>
+{% endif %}
+
 <a href="{{ url_for('history') }}" class="button">返回歷史紀錄</a>
 {% endblock %}

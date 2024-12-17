@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>飲食建議</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}">首頁</a>
+            <a href="{{ url_for('analysis') }}">飲食分析</a>
+            <a href="{{ url_for('suggestion') }}">飲食建議</a>
+            <a href="{{ url_for('history') }}">歷史紀錄</a>
+        </nav>
+    </header>
+    <main>
+        <h1>飲食建議</h1>
+        
+        <form method="POST" action="{{ url_for('suggestion') }}">
+            <label for="date">選擇日期：</label>
+            <input type="date" id="date" name="date" required>
+            
+            <label for="special_request">特殊需求：</label>
+            <textarea id="special_request" name="special_request" rows="4" placeholder="例如：需要低脂、高蛋白的建議..." required></textarea>
+            
+            <button type="submit">生成建議</button>
+        </form>
+        
+        {% if suggestion %}
+        <section>
+            <h2>生成的飲食建議：</h2>
+            <p>{{ suggestion }}</p>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

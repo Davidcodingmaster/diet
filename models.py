@@ -3,6 +3,14 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+class Suggestion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)  # 用戶選擇的日期
+    special_request = db.Column(db.Text, nullable=True)  # 用戶的特殊需求
+    generated_text = db.Column(db.Text, nullable=False)  # 生成的建議
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 建議生成的時間
+
+
 class FoodEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
