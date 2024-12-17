@@ -3,25 +3,37 @@
 <h1>飲食分析</h1>
 <form method="POST">
     <div id="ingredients">
-        <div>
+        <div class="ingredient-row">
             <input type="text" name="quantity[]" placeholder="數量">
             <input type="text" name="unit[]" placeholder="單位 (可選)">
             <input type="text" name="food[]" placeholder="食材名稱" required>
+            <button type="button" class="delete-btn" onclick="deleteIngredient(this)">刪除</button>
         </div>
     </div>
     <button type="button" onclick="addIngredient()">新增</button>
+    <br>
+    <label for="date_time">選擇日期與時間:</label>
+    <input type="datetime-local" id="date_time" name="date_time" required>
+    <br>
     <button type="submit">分析</button>
 </form>
 
 <script>
 function addIngredient() {
     const div = document.createElement('div');
+    div.className = 'ingredient-row';
     div.innerHTML = `
         <input type="text" name="quantity[]" placeholder="數量">
         <input type="text" name="unit[]" placeholder="單位 (可選)">
         <input type="text" name="food[]" placeholder="食材名稱" required>
+        <button type="button" class="delete-btn" onclick="deleteIngredient(this)">刪除</button>
     `;
     document.getElementById('ingredients').appendChild(div);
+}
+
+function deleteIngredient(button) {
+    const row = button.parentElement;
+    document.getElementById('ingredients').removeChild(row);
 }
 </script>
 
@@ -33,6 +45,8 @@ function addIngredient() {
             <th>卡路里</th>
             <th>蛋白質 (g)</th>
             <th>脂肪 (g)</th>
+            <th>碳水化合物 (g)</th>
+            <th>膳食纖維 (g)</th>
         </tr>
         {% for ingredient in data.ingredients %}
         <tr>
@@ -40,6 +54,8 @@ function addIngredient() {
             <td>{{ ingredient.parsed[0].nutrients.ENERC_KCAL.quantity }}</td>
             <td>{{ ingredient.parsed[0].nutrients.PROCNT.quantity }}</td>
             <td>{{ ingredient.parsed[0].nutrients.FAT.quantity }}</td>
+            <td>{{ ingredient.parsed[0].nutrients.CHOCDF.quantity }}</td>
+            <td>{{ ingredient.parsed[0].nutrients.FIBTG.quantity }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ date }} 的分析紀錄</h1>
+
+{% for time, entries in grouped_by_time.items() %}
+    <h2>{{ time }} 的分析</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>食材名稱</th>
+                <th>卡路里</th>
+                <th>蛋白質 (g)</th>
+                <th>脂肪 (g)</th>
+                <th>碳水化合物 (g)</th>
+                <th>膳食纖維 (g)</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.calories }}</td>
+                <td>{{ entry.protein }}</td>
+                <td>{{ entry.fat }}</td>
+                <td>{{ entry.carbs }}</td>
+                <td>{{ entry.fiber }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}" style="display:inline;">
+                        <button type="submit" onclick="return confirm('確定刪除此記錄？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}
+
+<a href="{{ url_for('history') }}" class="button">返回歷史紀錄</a>
+{% endblock %}
