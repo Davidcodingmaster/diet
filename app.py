@@ -123,8 +123,16 @@ def history_detail(date):
         if time_str not in grouped_by_time:
             grouped_by_time[time_str] = []
         grouped_by_time[time_str].append(entry)
+
+    # 查詢該日期的建議
+    suggestion = Suggestion.query.filter_by(date=date_obj.date()).first()
     
-    return render_template('history_detail.html', grouped_by_time=grouped_by_time, date=date)
+    return render_template(
+        'history_detail.html',
+        grouped_by_time=grouped_by_time,
+        date=date,
+        suggestion=suggestion.generated_text if suggestion else None
+    )
 
 
 @app.route('/delete/<int:entry_id>', methods=['POST'])
