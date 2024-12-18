@@ -1,12 +1,94 @@
-<!DOCTYPE html>
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<h1>健康追蹤系統</h1>
-<p>選擇以下功能進行操作：</p>
-<ul>
-  <li><a href="{{ url_for('analysis') }}">飲食分析</a></li>
-  <li><a href="{{ url_for('suggestion') }}">飲食建議</a></li>
-  <li><a href="{{ url_for('history') }}">歷史紀錄</a></li>
-</ul>
+<div class="hero-section">
+    <div class="hero-slide" id="slide1">
+        <img src="{{ url_for('static', filename='diet-analysis.jpg') }}" alt="飲食分析">
+        <div class="slide-content">
+            <h2>精準的飲食分析</h2>
+            <p>透過先進的數據追蹤技術，為您提供詳細且個人化的營養狀況報告。</p>
+            <a href="{{ url_for('analysis') }}" class="btn btn-primary">開始分析</a>
+        </div>
+    </div>
 
+    <div class="hero-slide" id="slide2">
+        <img src="{{ url_for('static', filename='diet-suggestion.jpg') }}" alt="飲食建議">
+        <div class="slide-content">
+            <h2>智能飲食建議</h2>
+            <p>根據您的身體狀況和健康目標，提供量身定制的飲食推薦和營養建議。</p>
+            <a href="{{ url_for('suggestion') }}" class="btn btn-primary">查看建議</a>
+        </div>
+    </div>
+
+    <div class="hero-slide" id="slide3">
+        <img src="{{ url_for('static', filename='health-history.jpg') }}" alt="歷史紀錄">
+        <div class="slide-content">
+            <h2>全面健康歷程追蹤</h2>
+            <p>記錄並視覺化您的健康進程，幫助您洞察身體的變化趨勢。</p>
+            <a href="{{ url_for('history') }}" class="btn btn-primary">檢視歷史</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-slide:nth-child(1) { opacity: 1; }
+
+.slide-content {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+
+    function nextSlide() {
+        slides[currentSlide].style.opacity = 0;
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].style.opacity = 1;
+    }
+
+    setInterval(nextSlide, 5000);  // 每5秒切換一次
+});
+</script>
 {% endblock %}

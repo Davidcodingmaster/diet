@@ -4,15 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- 引入 Font Awesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Health Tracker</title>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="{{ url_for('index') }}">首頁</a>
-            <a href="{{ url_for('analysis') }}">飲食分析</a>
-            <a href="{{ url_for('suggestion') }}">飲食建議</a>
-            <a href="{{ url_for('history') }}">歷史紀錄</a>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Diet Tracker</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> 首頁</a></li>
+                <li><a href="{{ url_for('analysis') }}"><i class="fas fa-chart-pie"></i> 飲食分析</a></li>
+                <li><a href="{{ url_for('suggestion') }}"><i class="fas fa-utensils"></i> 飲食建議</a></li>
+                <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> 歷史紀錄</a></li>
+            </ul>
         </nav>
     </header>
     <main>

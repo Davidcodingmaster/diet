@@ -105,7 +105,7 @@ def history():
         if date_str not in grouped_entries:
             grouped_entries[date_str] = []
         grouped_entries[date_str].append(entry)
-
+    print("history page access")
     return render_template('history.html', grouped_entries=grouped_entries)
 
 @app.route('/history/<date>')
@@ -179,7 +179,7 @@ def analysis():
             flash("分析結果已儲存！", "success")
 
         return render_template('analysis.html', data=api_response)
-
+    print("analysis page access.")
     return render_template('analysis.html')
 
 
