@@ -1,39 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>飲食建議</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="{{ url_for('index') }}">首頁</a>
-            <a href="{{ url_for('analysis') }}">飲食分析</a>
-            <a href="{{ url_for('suggestion') }}">飲食建議</a>
-            <a href="{{ url_for('history') }}">歷史紀錄</a>
-        </nav>
-    </header>
-    <main>
-        <h1>飲食建議</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="bg-gradient-to-br from-blue-50 to-white shadow-xl rounded-xl p-8">
+        <h1 class="text-5xl font-extrabold text-center text-blue-800 mb-10">飲食建議生成器</h1>
         
-        <form method="POST" action="{{ url_for('suggestion') }}">
-            <label for="date">選擇日期：</label>
-            <input type="date" id="date" name="date" required>
-            
-            <label for="special_request">特殊需求：</label>
-            <textarea id="special_request" name="special_request" rows="4" placeholder="例如：需要低脂、高蛋白的建議..." required></textarea>
-            
-            <button type="submit">生成建議</button>
+        <form method="POST" action="{{ url_for('suggestion') }}" class="space-y-8">
+            <!-- 日期選擇 -->
+            <div class="relative">
+                <label for="date" class="block text-lg font-medium text-gray-700 mb-2">選擇日期</label>
+                <input type="date" id="date" name="date" required 
+                    class="w-full px-5 py-4 bg-white border border-gray-300 rounded-lg shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                    📅
+                </div>
+            </div>
+
+            <!-- 特殊需求 -->
+            <div class="relative">
+                <label for="special_request" class="block text-lg font-medium text-gray-700 mb-2">特殊需求</label>
+                <textarea id="special_request" name="special_request" rows="5" required
+                    placeholder="例如：需要低脂、高蛋白的建議..." 
+                    class="w-full px-5 py-4 bg-white border border-gray-300 rounded-lg shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <div class="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                    ✍️
+                </div>
+            </div>
+
+            <!-- 提交按鈕 -->
+            <div class="text-center">
+                <button type="submit" 
+                    class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-10 py-4 rounded-full text-xl font-bold shadow-lg hover:from-blue-600 hover:to-blue-800 hover:shadow-xl transition-transform transform hover:scale-110">
+                    生成建議
+                </button>
+            </div>
         </form>
-        
-        {% if suggestion %}
-        <section>
-            <h2>生成的飲食建議：</h2>
-            <p>{{ suggestion }}</p>
-        </section>
-        {% endif %}
-    </main>
-</body>
-</html>
+    </div>
+
+    {% if suggestion %}
+    <div class="mt-12 bg-white shadow-xl rounded-xl p-8">
+        <h2 class="text-3xl font-semibold text-blue-800 mb-6">生成的飲食建議</h2>
+        <div class="bg-blue-50 px-6 py-4 rounded-lg shadow-sm">
+            <p class="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">{{ suggestion }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

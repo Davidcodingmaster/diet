@@ -7,6 +7,33 @@ body, h1, ul, li, a {
   box-sizing: border-box;
 }
 
+/* 全局字體與背景 */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9fafb;
+  color: #333;
+}
+
+/* 輸入框與文字框聚焦效果 */
+input:focus, textarea:focus {
+  box-shadow: 0 0 8px rgba(30, 144, 255, 0.4);
+}
+
+/* 日期選擇與特殊需求圖標 */
+.relative div {
+  font-size: 1.5rem;
+}
+
+/* 提交按鈕過渡效果 */
+button {
+  transition: all 0.3s ease-in-out;
+}
+
+/* 建議區塊美化 */
+.bg-blue-50 {
+  border-left: 4px solid #4299e1; /* 藍色標示 */
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;

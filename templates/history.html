@@ -1,21 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>分析歷史紀錄</h1>
-<table>
-    <thead>
-        <tr>
-            <th>日期</th>
-            <th>分析紀錄數量</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for date, entries in grouped_entries.items() %}
-        <tr>
-            <td><a href="{{ url_for('history_detail', date=date) }}">{{ date }}</a></td>
-            <td>{{ entries|length }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-gradient-to-br from-gray-100 to-white shadow-lg rounded-lg p-8">
+        <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-10">分析歷史紀錄</h1>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse border border-gray-200">
+                <thead class="bg-blue-100">
+                    <tr>
+                        <th class="px-6 py-3 text-sm font-semibold text-gray-800 uppercase border border-gray-200">日期</th>
+                        <th class="px-6 py-3 text-sm font-semibold text-gray-800 uppercase border border-gray-200">分析紀錄數量</th>
+                        <th class="px-6 py-3 text-sm font-semibold text-gray-800 uppercase border border-gray-200">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for date, entries in grouped_entries.items() %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 border border-gray-200">
+                            <a href="{{ url_for('history_detail', date=date) }}" class="text-blue-600 hover:text-blue-800">
+                                {{ date }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 border border-gray-200">{{ entries|length }}</td>
+                        <td class="px-6 py-4 border border-gray-200 text-center">
+                            <a href="{{ url_for('history_detail', date=date) }}" 
+                               class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-md">
+                                查看詳情
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}
