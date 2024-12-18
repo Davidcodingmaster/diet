@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 import requests
 from models import db, FoodEntry  # 資料庫模型
 
@@ -82,6 +82,23 @@ def analyze_food(ingredients):
     else:
         flash(f"Error: {response.status_code}, {response.text}")
         return None
+    
+@app.route('/delete_entry/<int:entry_id>', methods=['POST'])
+def delete_entry(entry_id):
+    try:
+        # 尋找要刪除的紀錄
+        entry = FoodEntry.query.get(entry_id)
+        
+        if entry:
+            # 刪除紀錄
+            db.session.delete(entry)
+            db.session.commit()
+            return jsonify({'status': 'success', 'message': '删除成功'}), 200
+        else:
+            return jsonify({'status': 'error', 'message': '记录不存在'}), 404
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():

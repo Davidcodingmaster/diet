@@ -1,28 +1,176 @@
-{% extends 'base.html' %}
-{% block content %}
-<h1>分析歷史紀錄</h1>
-<table>
-    <thead>
-        <tr>
-            <th>食材名稱</th>
-            <th>卡路里</th>
-            <th>蛋白質 (g)</th>
-            <th>脂肪 (g)</th>
-            <th>碳水化合物 (g)</th>
-            <th>記錄時間</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for entry in entries %}
-        <tr>
-            <td>{{ entry.name }}</td>
-            <td>{{ entry.calories }}</td>
-            <td>{{ entry.protein }}</td>
-            <td>{{ entry.fat }}</td>
-            <td>{{ entry.carbs }}</td>
-            <td>{{ entry.created_at }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div
+      class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+    >
+      <h2 class="h4 mb-0">
+        <i class="bi bi-clock-history me-2"></i>分析歷史紀錄
+      </h2>
+      <div>
+        <button
+          class="btn btn-light btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#filterModal"
+        >
+          <i class="bi bi-funnel me-1"></i>篩選
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>食材名稱</th>
+              <th>卡路里</th>
+              <th>蛋白質 (g)</th>
+              <th>脂肪 (g)</th>
+              <th>碳水化合物 (g)</th>
+              <th>記錄時間</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr>
+              <td>
+                <span class="badge bg-info me-2">{{ loop.index }}</span>
+                {{ entry.name }}
+              </td>
+              <td>
+                <span class="badge bg-warning text-dark">
+                  {{ entry.calories|round(1) }} 卡路里
+                </span>
+              </td>
+              <td>{{ entry.protein|round(1) }}</td>
+              <td>{{ entry.fat|round(1) }}</td>
+              <td>{{ entry.carbs|round(1) }}</td>
+              <td>
+                <small class="text-muted">
+                  <i class="bi bi-clock me-1"></i>
+                  {{ entry.created_at.strftime('%Y-%m-%d %H:%M') if
+                  entry.created_at else '無資料' }}
+                </small>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button class="btn btn-outline-primary" title="詳細信息">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-danger delete-entry"
+                    data-id="{{ entry.id }}"
+                    title="刪除"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if entries|length == 0 %}
+      <div class="text-center p-4">
+        <i class="bi bi-inbox display-4 text-muted"></i>
+        <p class="text-muted mt-3">尚無歷史紀錄</p>
+      </div>
+      {% endif %}
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <small class="text-muted">總共 {{ entries|length }} 筆記錄</small>
+      <nav aria-label="分頁導航">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">上一頁</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">下一頁</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 篩選模態框 -->
+  <div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">篩選紀錄</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">日期範圍</label>
+            <input type="date" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">最低卡路里</label>
+            <input type="number" class="form-control" placeholder="例如：100" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            取消
+          </button>
+          <button type="button" class="btn btn-primary">應用篩選</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 處理刪除按鈕事件
+    document.querySelector("tbody").addEventListener("click", function (e) {
+      const deleteBtn = e.target.closest(".delete-entry");
+      if (deleteBtn) {
+        const entryId = deleteBtn.getAttribute("data-id");
+
+        // 顯示確認對話框
+        if (confirm("確定刪除這個紀錄?")) {
+          fetch(`/delete_entry/${entryId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                // 從DOM中找尋指定欄位
+                deleteBtn.closest("tr").remove();
+
+                // 刪除成功提示
+                alert("刪除成功");
+              } else {
+                // 顯示錯誤訊息
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("刪除失敗");
+            });
+        }
+      }
+    });
+  });
+</script>
 {% endblock %}

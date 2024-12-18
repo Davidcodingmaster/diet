@@ -1,12 +1,60 @@
 <!DOCTYPE html>
-{% extends 'base.html' %}
-{% block content %}
-<h1>健康追蹤系統</h1>
-<p>選擇以下功能進行操作：</p>
-<ul>
-  <li><a href="{{ url_for('analysis') }}">飲食分析</a></li>
-  <li><a href="{{ url_for('suggestion') }}">飲食建議</a></li>
-  <li><a href="{{ url_for('history') }}">歷史紀錄</a></li>
-</ul>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0 rounded-lg">
+    <div class="card-header bg-primary text-white text-center py-4">
+      <h1 class="h2 mb-0">健康追蹤系統</h1>
+    </div>
+    <div class="card-body p-5">
+      <p class="lead text-center mb-4">選擇以下功能進行操作：</p>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="list-group">
+            <a
+              href="{{ url_for('analysis') }}"
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            >
+              飲食分析
+              <span class="badge bg-primary rounded-pill">
+                <i class="bi bi-pie-chart"></i>
+              </span>
+            </a>
+            <a
+              href="{{ url_for('suggestion') }}"
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            >
+              飲食建議
+              <span class="badge bg-success rounded-pill">
+                <i class="bi bi-clipboard-check"></i>
+              </span>
+            </a>
+            <a
+              href="{{ url_for('history') }}"
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            >
+              歷史紀錄
+              <span class="badge bg-info rounded-pill">
+                <i class="bi bi-clock-history"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-center py-3 bg-light">
+      <small class="text-muted">© 2024 健康追蹤系統</small>
+    </div>
+  </div>
+</div>
 
+<!-- Required Bootstrap CSS and JS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

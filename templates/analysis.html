@@ -1,47 +1,143 @@
-{% extends 'base.html' %}
-{% block content %}
-<h1>飲食分析</h1>
-<form method="POST">
-    <div id="ingredients">
-        <div>
-            <input type="text" name="quantity[]" placeholder="數量">
-            <input type="text" name="unit[]" placeholder="單位 (可選)">
-            <input type="text" name="food[]" placeholder="食材名稱" required>
-        </div>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h4 mb-0"><i class="bi bi-calculator me-2"></i>飲食分析</h2>
     </div>
-    <button type="button" onclick="addIngredient()">新增</button>
-    <button type="submit">分析</button>
-</form>
+    <div class="card-body">
+      <form method="POST" id="ingredientForm">
+        <div id="ingredients">
+          <div class="ingredient-row row mb-3 align-items-center">
+            <div class="col-3">
+              <input
+                type="text"
+                name="quantity[]"
+                class="form-control"
+                placeholder="數量"
+              />
+            </div>
+            <div class="col-3">
+              <input
+                type="text"
+                name="unit[]"
+                class="form-control"
+                placeholder="單位 (可選)"
+              />
+            </div>
+            <div class="col-5">
+              <input
+                type="text"
+                name="food[]"
+                class="form-control"
+                placeholder="食材名稱"
+                required
+              />
+            </div>
+            <div class="col-1">
+              <button
+                type="button"
+                class="btn btn-danger btn-remove-ingredient w-100"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button
+            type="button"
+            id="addIngredientBtn"
+            class="btn btn-outline-primary"
+          >
+            <i class="bi bi-plus-circle me-1"></i>新增食材
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-graph-up me-1"></i>開始分析
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if data %}
+  <div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+      <h3 class="h5 mb-0"><i class="bi bi-clipboard-data me-2"></i>分析結果</h3>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>食材</th>
+              <th>卡路里</th>
+              <th>蛋白質 (g)</th>
+              <th>脂肪 (g)</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ingredient in data.ingredients %}
+            <tr>
+              <td>
+                <span class="badge bg-info me-2">{{ loop.index }}</span>
+                {{ ingredient.text }}
+              </td>
+              <td>
+                <span class="badge bg-warning text-dark">
+                  {{ ingredient.parsed[0].nutrients.ENERC_KCAL.quantity|round(1)
+                  }} 卡路里
+                </span>
+              </td>
+              <td>
+                {{ ingredient.parsed[0].nutrients.PROCNT.quantity|round(1) }}
+              </td>
+              <td>
+                {{ ingredient.parsed[0].nutrients.FAT.quantity|round(1) }}
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary" title="詳細信息">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
 
 <script>
-function addIngredient() {
-    const div = document.createElement('div');
-    div.innerHTML = `
-        <input type="text" name="quantity[]" placeholder="數量">
-        <input type="text" name="unit[]" placeholder="單位 (可選)">
-        <input type="text" name="food[]" placeholder="食材名稱" required>
-    `;
-    document.getElementById('ingredients').appendChild(div);
-}
-</script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const ingredientsContainer = document.getElementById("ingredients");
+    const addIngredientBtn = document.getElementById("addIngredientBtn");
 
-{% if data %}
-    <h2>分析結果</h2>
-    <table>
-        <tr>
-            <th>食材</th>
-            <th>卡路里</th>
-            <th>蛋白質 (g)</th>
-            <th>脂肪 (g)</th>
-        </tr>
-        {% for ingredient in data.ingredients %}
-        <tr>
-            <td>{{ ingredient.text }}</td>
-            <td>{{ ingredient.parsed[0].nutrients.ENERC_KCAL.quantity }}</td>
-            <td>{{ ingredient.parsed[0].nutrients.PROCNT.quantity }}</td>
-            <td>{{ ingredient.parsed[0].nutrients.FAT.quantity }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endif %}
+    // 動態新增食材列
+    addIngredientBtn.addEventListener("click", function () {
+      const template = document.querySelector(".ingredient-row");
+      const newRow = template.cloneNode(true);
+
+      // 清空輸入框
+      newRow.querySelectorAll("input").forEach((input) => (input.value = ""));
+
+      ingredientsContainer.appendChild(newRow);
+    });
+
+    // 動態移除食材列
+    ingredientsContainer.addEventListener("click", function (e) {
+      const removeBtn = e.target.closest(".btn-remove-ingredient");
+      if (removeBtn) {
+        const rows = ingredientsContainer.querySelectorAll(".ingredient-row");
+        if (rows.length > 1) {
+          removeBtn.closest(".ingredient-row").remove();
+        } else {
+          alert("至少保留一個食材");
+        }
+      }
+    });
+  });
+</script>
 {% endblock %}
